@@ -1,3 +1,3 @@
 # Big Data Project
 
-This read me file is inadequate, just like the project itself.
+This readme file is inadequate, just like the project itself.
