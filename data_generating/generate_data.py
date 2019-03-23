@@ -3,21 +3,45 @@ import matplotlib.pyplot as plt
 import random
 import numpy as np
 
-samples = np.random.normal(0, 1, size=5000)
-
-#Add trend to data
-trend_samples = []
-for count, sample in enumerate(samples):
-
-	point = abs(sample)+0.05*count**1.5
-	point = point + np.sin(count/100)*500
-	trend_samples.append(point)
+sample_size = 5000
+random_walk_weight = 10
+random_walk_variance = 10
+trend = 0.2
+exponent = 1.2
 
 
-plt.plot(samples)
+# Get index for time series
 
-# plt.plot(trend_samples)
+def generate_ts():
+	index = np.arange(sample_size)
+	sample = []
+	random_walk = np.random.normal(0,random_walk_variance)
+
+	for time in index:
+
+		#Add seasonality 1
+		y = np.sin(time/100)*200
+
+		#Add seasonality 2
+		y = y + np.sin(time/250)*400
+
+		#Add trend
+		y = y + (trend * time ** exponent)
+
+		# Random walk component
+		random_walk = random_walk + np.random.normal(0,random_walk_variance)
+		y = y + random_walk * random_walk_weight
+		
+
+		sample.append(y)
+	return sample
+
+def plot_ts(n):
+	for _ in range(n):
+		plt.plot(generate_ts())
 
 
+
+plot_ts(10)
 
 plt.show()
