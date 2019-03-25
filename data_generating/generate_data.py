@@ -68,7 +68,8 @@ def plot_ts(n):
 #For profiling by line:
 #kernprof -l generate_data.py
 #python3 -m line_profiler generate_data.py.lprof
-@profile 
+#uncomment following line:
+#@profile 
 def create_dummy_dataset():
 	df = []
 	sample_range = 0
