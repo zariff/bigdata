@@ -27,6 +27,7 @@ terms = []
 with open('wordlist.csv', 'r') as f:
 	reader = csv.reader(f)
 	terms = [word[0] for word in list(reader)]
+	random.shuffle(terms)
 
 # Generates time series
 def generate_ts():
@@ -63,18 +64,25 @@ def plot_ts(n):
 		plt.plot(generate_ts())
 
 #Creates a dummy dataset from n time series for 'codes'
-@profile
+
+#For profiling by line:
+#kernprof -l generate_data.py
+#python3 -m line_profiler generate_data.py.lprof
+@profile 
 def create_dummy_dataset():
 	df = []
+	sample_range = 0
 	for i in range(n_samples):
 		sample = generate_ts()
 		for index, number in enumerate(sample): #Loop over a sample
 			for n in range(int(round(number))): #Create n entries
 				date = datetime.datetime(2000, 1, 1, 0, 0) + timedelta(days=index)
-				sample = random.sample(terms, 10)
+				current_sample = i+index+n
+				sample = terms[current_sample:current_sample+100]
 				text = " ".join(sample)
 				df.append([date, codes[i], text])
-	return pd.DataFrame(df, columns=['date', 'code', 'text'])
+	pandas_df = pd.DataFrame(df, columns=['date', 'code', 'text'])
+	return pandas_df
 
 
 dummy_dataset = create_dummy_dataset()
