@@ -16,7 +16,7 @@ seasonality_1_weight = 5
 seasonality_2_freq = 7 #lower is shorter
 seasonality_2_weight = 2
 
-sample_size = 100
+sample_size = 1000
 
 trend = 0.02
 exponent = 1
@@ -63,15 +63,18 @@ def plot_ts(n):
 		plt.plot(generate_ts())
 
 #Creates a dummy dataset from n time series for 'codes'
+@profile
 def create_dummy_dataset():
-	df = pd.DataFrame({'date': [], 'code': [], 'text': []})
+	df = []
 	for i in range(n_samples):
 		sample = generate_ts()
 		for index, number in enumerate(sample): #Loop over a sample
 			for n in range(int(round(number))): #Create n entries
 				date = datetime.datetime(2000, 1, 1, 0, 0) + timedelta(days=index)
-				df = df.append({'date': date, 'code': codes[i], 'text': " ".join(random.sample(terms, 10))}, ignore_index=True)
-	return df
+				sample = random.sample(terms, 10)
+				text = " ".join(sample)
+				df.append([date, codes[i], text])
+	return pd.DataFrame(df, columns=['date', 'code', 'text'])
 
 
 dummy_dataset = create_dummy_dataset()
