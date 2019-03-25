@@ -16,7 +16,7 @@ seasonality_1_weight = 5
 seasonality_2_freq = 7 #lower is shorter
 seasonality_2_weight = 2
 
-sample_size = 500
+sample_size = 100
 
 trend = 0.02
 exponent = 1
@@ -26,8 +26,7 @@ n_samples = 10
 terms = []
 with open('wordlist.csv', 'r') as f:
 	reader = csv.reader(f)
-	terms = list(reader)
-
+	terms = [word[0] for word in list(reader)]
 
 # Generates time series
 def generate_ts():
@@ -71,7 +70,7 @@ def create_dummy_dataset():
 		for index, number in enumerate(sample): #Loop over a sample
 			for n in range(int(round(number))): #Create n entries
 				date = datetime.datetime(2000, 1, 1, 0, 0) + timedelta(days=index)
-				df = df.append({'date': date, 'code': codes[i], 'text': random.sample(terms, 10)}, ignore_index=True)
+				df = df.append({'date': date, 'code': codes[i], 'text': " ".join(random.sample(terms, 10))}, ignore_index=True)
 	return df
 
 
